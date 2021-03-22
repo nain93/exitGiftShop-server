@@ -33,7 +33,14 @@ module.exports = {
           as: "puzzles",
           attributes: { exclude: ["id"] },
         },
+        { model: artModel, as: "art_uu"},
       ],
+      order: [
+        [ `bids`, `id`, `DESC`],
+        [`puzzles`, `updatedAt`, `DESC`],
+        [`paddles`, `updatedAt`, `DESC`],
+        [`likes`, `updatedAt`, `DESC`],
+      ]
     });
     if (!list) {
       res.status(404).json({
@@ -75,6 +82,13 @@ module.exports = {
           as: "puzzles",
           attributes: { exclude: ["id"] },
         },
+        { model: artModel, as: "art_uu"},
+      ],
+      order: [
+        [ `bids`, `id`, `DESC`],
+        [`puzzles`, `updatedAt`, `DESC`],
+        [`paddles`, `updatedAt`, `DESC`],
+        [`likes`, `updatedAt`, `DESC`],
       ],
       attributes: { exclude: ["id"] },
     });
@@ -118,6 +132,12 @@ module.exports = {
           as: "puzzles",
           attributes: { exclude: ["id"] },
         },
+      ],
+      order: [
+        [ `bids`, `id`, `DESC`],
+        [`puzzles`, `updatedAt`, `DESC`],
+        [`paddles`, `updatedAt`, `DESC`],
+        [`likes`, `updatedAt`, `DESC`],
       ],
       attributes: { exclude: ["id"] },
     });
@@ -249,8 +269,10 @@ module.exports = {
       });
       return;
     }
-    const auction = await auctionModel.findOne({
-      where: { uuid },
+    const auction = await auctionModel.findOne({ 
+      include: [ `bids`, `likes`, `paddles`, `puzzles`,
+      { model: artModel, as: "art_uu"}],
+      where: { uuid }
     });
     if (!auction) {
       res.status(400).json({
@@ -294,6 +316,13 @@ module.exports = {
           as: "puzzles",
           attributes: { exclude: ["id"] },
         },
+        { model: artModel, as: "art_uu"},
+      ],
+      order: [
+        [ `bids`, `id`, `DESC`],
+        [`puzzles`, `updatedAt`, `DESC`],
+        [`paddles`, `updatedAt`, `DESC`],
+        [`likes`, `updatedAt`, `DESC`],
       ],
       attributes: { exclude: ["id"] },
     });
